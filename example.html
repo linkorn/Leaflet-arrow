@@ -47,6 +47,14 @@
                 
             }
 		}
+		
+        var polyline = new L.Polyline(coords, {
+            color : '#0000FF',
+            weight : 2,
+            opacity : 0.6
+        });
+
+        map.addLayer(polyline);		
 
 		map.setView([-3.75018, -38.538692], 13);
 
