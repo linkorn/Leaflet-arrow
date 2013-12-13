@@ -7,11 +7,20 @@
 /*global L:true*/
 
 L.Arrow = L.Circle.extend({
+	initialize: function (latlng, radius, options) {
+                L.Circle.prototype.initialize.call(this, latlng, radius, options);
+                this._latlng = L.latLng(latlng);
+                this._radius = radius;
+    },
 	options: {
 		startAngle: 0,
 		stopAngle: 359.9999,
 		pointAngle: 180
 	},
+
+	projectLatlngs: function () {
+		this._point = this._map.latLngToLayerPoint(this._latlng);
+    },
 
 	// make sure 0 degrees is up (North) and convert to radians.
 	startAngle: function () {
@@ -34,8 +43,8 @@ L.Arrow = L.Circle.extend({
 	},
 	
 	getPathString: function () {
-		var center = this._point,
-		    r = this._radius;
+		var center = this._point;
+		var r = this._getScaledRadius();
 
 		var start = this.rotated(this.startAngle(), r),
 			end = this.rotated(this.stopAngle(), r),
@@ -62,6 +71,7 @@ L.Arrow = L.Circle.extend({
 			return ret;
 		} 
 	},
+	
 	setStartAngle: function (angle) {
 		this.options.startAngle = angle;
 		return this.redraw();
@@ -87,7 +97,23 @@ L.Arrow = L.Circle.extend({
 		this.options.pointAngle = direction + 180;
 
 		return this.redraw();
-	}
+	},
+	 // found in L.Circle
+        _getScaled: function (ex) {
+                return (ex*this._map.getZoom())/18;
+        },
+        
+        _getScaledHeight: function(){
+                return this._getScaled(this._radius);
+        },
+
+         _getScaledRadius: function(){
+                return this._getScaled(this._radius);
+        },
+        
+        _getScaledWidth: function () {
+        	return this._getScaled(this._radius);
+        },
 });
 
 L.arrow = function (latlng, radius, options) {

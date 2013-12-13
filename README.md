@@ -1,4 +1,4 @@
 Leaflet-arrow
 =============
 
-Leaflet-arrow
+Leaflet-arrow with scaling
